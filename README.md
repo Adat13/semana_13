@@ -247,16 +247,35 @@ Para cumplir con la directriz estricta del laboratorio, se documenta la resoluci
 
 ## EVIDENCIAS DEL EJERCICIO DESARROLLADO
 
-### 1. Captura de Pantalla: Swagger UI expuesto en `/api/docs/`
-Muestra la interfaz interactiva de Swagger documentando todos los endpoints (iglesias, participantes, filtros y acciones custom):
+### 1. CAPTURAS DE PANTALLA PASO A PASO (SWAGGER UI)
 
-![Swagger UI de la API](./evidencias/swagger_ui.png)
+A continuación se presentan las capturas de pantalla de la interfaz interactiva de Swagger UI, las cuales documentan y validan cada una de las fases solicitadas:
+
+#### A. Vista General de la API (Fase 1 y 5)
+Muestra los esquemas y las rutas registradas automáticamente para las Iglesias y los Participantes:
+![Swagger Overview](./evidencias/swagger_overview.png)
+
+#### B. Listado de Iglesias con Conteo de Participantes (Fase 2)
+Prueba del método `GET /api/iglesias/`. Muestra la información de las iglesias incluyendo el campo calculado `participantes_count` mediante `SerializerMethodField`:
+![Swagger Iglesias List](./evidencias/swagger_iglesias_list.png)
+
+#### C. Listado de Participantes con Paginación y HATEOAS (Fase 3 y 4)
+Prueba del método `GET /api/participantes/`. Muestra la paginación estándar de DRF (con un tamaño de página de 5, campo `count` y enlace `next` a la página 2), y la representación hipervinculada (campo `url` y relación `iglesia` en formato de enlace HATEOAS):
+![Swagger Participantes Paginado](./evidencias/swagger_participantes_paginated.png)
+
+#### D. Endpoint Personalizado: Resumen de Inscritos (Fase 3 - Custom Action)
+Prueba de la acción personalizada `GET /api/participantes/resumen/` que devuelve métricas globales de la convención agrupadas por estado:
+![Swagger Resumen Endpoint](./evidencias/swagger_resumen_endpoint.png)
+
+#### E. Endpoint Personalizado: Cambiar Estado de Participante (Fase 3 - Custom Action)
+Prueba de la acción de cambio de estado `POST /api/participantes/{id}/cambiar-estado/` enviando la carga útil `{"status": "inactivo"}`:
+![Swagger Cambiar Estado Endpoint](./evidencias/swagger_cambiar_estado_endpoint.png)
 
 ---
 
-### 2. Log de Ejecución de Pruebas Automatizadas (`test_api.py`)
-El script de prueba realiza llamadas HTTP secuenciales al servidor local `http://127.0.0.1:8000`. 
-El resultado demuestra el correcto funcionamiento de la paginación, filtros de consulta, acciones personalizadas `@action` y la activación del límite de tasa (Throttling / HTTP 429) en la 6ta petición rápida:
+### 2. LOG DE EJECUCIÓN DE PRUEBAS AUTOMATIZADAS (`test_api.py`)
+
+El siguiente log de ejecución del script de prueba consolida el comportamiento de la API:
 
 ```text
 ======================================================================
@@ -382,3 +401,4 @@ Response: {"detail":"Solicitud fue regulada (throttled). Se espera que esté dis
 
 ======================================================================
 ```
+
